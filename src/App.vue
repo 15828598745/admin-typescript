@@ -6,11 +6,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import ServiceWorkerUpdatePopup from '@/pwa/components/ServiceWorkerUpdatePopup.vue'
+import { Component, Vue } from "vue-property-decorator";
+import ServiceWorkerUpdatePopup from "@/pwa/components/ServiceWorkerUpdatePopup.vue";
+import axios from "axios";
+import { AppModule } from "./store/modules/app";
 
 @Component({
-  name: 'App',
+  name: "App",
   components: {
     ServiceWorkerUpdatePopup
   }

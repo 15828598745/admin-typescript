@@ -9,7 +9,6 @@
     <div class="dropzone-custom-content">
       <h3
         class="dropzone-custom-title"
-        :style="{color: themeColor}"
       >
         Drag and drop to upload content!
       </h3>
@@ -24,7 +23,6 @@
 import VueDropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { SettingsModule } from '@/store/modules/settings'
 
 @Component({
   name: 'Dropzone',
@@ -61,10 +59,6 @@ export default class extends Vue {
       dictRemoveFile: this.dictRemoveFile,
       dictMaxFilesExceeded: this.dictMaxFilesExceeded
     }
-  }
-
-  get themeColor() {
-    return SettingsModule.theme
   }
 
   // You can add more Event handler, see: https://rowanwins.github.io/vue-dropzone/docs/dist/#/events

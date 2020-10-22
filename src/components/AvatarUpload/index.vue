@@ -7,7 +7,6 @@
     :height="height"
     :params="params"
     :headers="headers"
-    :lang-type="language"
     :with-credentials="true"
     img-format="png"
     @src-file-set="srcFileSet"
@@ -39,14 +38,6 @@ export default class extends Vue {
   @Prop({ default: () => null }) private headers!: object
 
   // https://github.com/dai-siki/vue-image-crop-upload#language-package
-  private languageTypeList: { [key: string]: string } = {
-    en: 'en',
-    zh: 'zh',
-    es: 'es-MX',
-    ja: 'ja',
-    ko: 'ko',
-    it: 'it'
-  }
 
   get show() {
     return this.value
@@ -54,10 +45,6 @@ export default class extends Vue {
 
   set show(value) {
     this.$emit('input', value)
-  }
-
-  get language() {
-    return this.languageTypeList[AppModule.language]
   }
 
   private srcFileSet(fileName: string, fileType: string, fileSize: number) {

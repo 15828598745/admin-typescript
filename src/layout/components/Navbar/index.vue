@@ -1,123 +1,65 @@
 <template>
   <div class="navbar">
-    <hamburger
-      id="hamburger-container"
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-      @toggleClick="toggleSideBar"
-    />
-    <breadcrumb
-      id="breadcrumb-container"
-      class="breadcrumb-container"
-    />
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <header-search class="right-menu-item" />
         <error-log class="errLog-container right-menu-item hover-effect" />
         <screenfull class="right-menu-item hover-effect" />
-        <el-tooltip
-          :content="$t('navbar.size')"
-          effect="dark"
-          placement="bottom"
-        >
+        <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select class="right-menu-item hover-effect" />
         </el-tooltip>
-        <lang-select class="right-menu-item hover-effect" />
       </template>
-      <el-dropdown
-        class="avatar-container right-menu-item hover-effect"
-        trigger="click"
-      >
-        <div class="avatar-wrapper">
-          <img
-            :src="avatar+'?imageView2/1/w/80/h/80'"
-            class="user-avatar"
-          >
-          <i class="el-icon-caret-bottom" />
+      <el-tooltip content="退出" effect="dark" placement="bottom">
+        <div class="right-menu-item" @click="logout">
+          <i class="el-icon-switch-button" />
         </div>
-        <el-dropdown-menu slot="dropdown">
-          <router-link to="/profile/">
-            <el-dropdown-item>
-              {{ $t('navbar.profile') }}
-            </el-dropdown-item>
-          </router-link>
-          <router-link to="/">
-            <el-dropdown-item>
-              {{ $t('navbar.dashboard') }}
-            </el-dropdown-item>
-          </router-link>
-          <a
-            target="_blank"
-            href="https://github.com/armour/vue-typescript-admin-template/"
-          >
-            <el-dropdown-item>
-              {{ $t('navbar.github') }}
-            </el-dropdown-item>
-          </a>
-          <a
-            target="_blank"
-            href="https://armour.github.io/vue-typescript-admin-docs/"
-          >
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
-          <el-dropdown-item
-            divided
-            @click.native="logout"
-          >
-            <span style="display:block;">
-              {{ $t('navbar.logOut') }}
-            </span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      </el-tooltip>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { AppModule } from '@/store/modules/app'
-import { UserModule } from '@/store/modules/user'
-import Breadcrumb from '@/components/Breadcrumb/index.vue'
-import ErrorLog from '@/components/ErrorLog/index.vue'
-import Hamburger from '@/components/Hamburger/index.vue'
-import HeaderSearch from '@/components/HeaderSearch/index.vue'
-import LangSelect from '@/components/LangSelect/index.vue'
-import Screenfull from '@/components/Screenfull/index.vue'
-import SizeSelect from '@/components/SizeSelect/index.vue'
+import { Component, Vue } from "vue-property-decorator";
+import { AppModule } from "@/store/modules/app";
+import { UserModule } from "@/store/modules/user";
+import Breadcrumb from "@/components/Breadcrumb/index.vue";
+import ErrorLog from "@/components/ErrorLog/index.vue";
+import Hamburger from "@/components/Hamburger/index.vue";
+import HeaderSearch from "@/components/HeaderSearch/index.vue";
+import Screenfull from "@/components/Screenfull/index.vue";
+import SizeSelect from "@/components/SizeSelect/index.vue";
+import wenGif from "@/assets/images/wen.gif";
 
 @Component({
-  name: 'Navbar',
+  name: "Navbar",
   components: {
     Breadcrumb,
     ErrorLog,
     Hamburger,
     HeaderSearch,
-    LangSelect,
     Screenfull,
     SizeSelect
   }
 })
 export default class extends Vue {
+  private wenGif = wenGif;
   get sidebar() {
-    return AppModule.sidebar
+    return AppModule.sidebar;
   }
 
   get device() {
-    return AppModule.device.toString()
-  }
-
-  get avatar() {
-    return UserModule.avatar
+    return AppModule.device.toString();
   }
 
   private toggleSideBar() {
-    AppModule.ToggleSideBar(false)
+    AppModule.ToggleSideBar(false);
   }
 
   private async logout() {
-    await UserModule.LogOut()
-    this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    await UserModule.LogOut();
+    this.$router.push("/login");
   }
 }
 </script>
@@ -128,19 +70,18 @@ export default class extends Vue {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
-
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   .hamburger-container {
-    line-height: 46px;
+    line-height: 50px;
     height: 100%;
     float: left;
     padding: 0 15px;
     cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
+    transition: background 0.3s;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
-      background: rgba(0, 0, 0, .025)
+      background: rgba(0, 0, 0, 0.025);
     }
   }
 
@@ -172,10 +113,10 @@ export default class extends Vue {
 
       &.hover-effect {
         cursor: pointer;
-        transition: background .3s;
+        transition: background 0.3s;
 
         &:hover {
-          background: rgba(0, 0, 0, .025)
+          background: rgba(0, 0, 0, 0.025);
         }
       }
     }

@@ -10,7 +10,6 @@
         size="small"
         type="danger"
       >
-        <svg-icon name="bug" />
       </el-button>
     </el-badge>
 

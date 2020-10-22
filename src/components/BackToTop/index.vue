@@ -6,10 +6,6 @@
       class="back-to-ceiling"
       @click="backToTop"
     >
-      <svg-icon
-        name="back-top"
-        class="backTopIcon"
-      />
     </div>
   </transition>
 </template>

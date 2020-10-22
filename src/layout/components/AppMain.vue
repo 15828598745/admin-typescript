@@ -51,7 +51,8 @@ export default class extends Vue {
   }
 
   .fixed-header+.app-main {
-    padding-top: 84px;
+    padding-top: 100px;
+    padding-left: 15px;
   }
 }
 </style>
