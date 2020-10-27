@@ -3,15 +3,20 @@
     <el-button v-waves type="primary" @click="test">
       测试
     </el-button>
-    <input type="text" id="input" placeholder="" />
+    <big-file-upload />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { testApi, loginOut } from "../../api/app";
+import { loginOut } from "../../api/app";
+import bigFileUpload from '../../components/Upload/bigFileUpload.vue';
+
 @Component({
-  name: "App"
+  name: "App",
+  components: {
+    bigFileUpload
+  }
 })
 export default class extends Vue {
   test() {
@@ -30,7 +35,6 @@ export default class extends Vue {
   background: none;
   border: none;
   outline: none;
-  
   color: #abc;
   font-size: 3em;
   text-align: center;
@@ -39,4 +43,3 @@ export default class extends Vue {
   user-select: none;
 }
 </style>
-

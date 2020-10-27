@@ -44,7 +44,10 @@ export const asyncRoutes: RouteConfig[] = [
   {
     path: '/',
     component: Layout,
-    redirect: '/home'
+    redirect: '/home',
+    meta: {
+      hidden: true
+    }
   },
   {
     path: '/home',
@@ -53,8 +56,7 @@ export const asyncRoutes: RouteConfig[] = [
     name: 'home',
     meta: {
       title: '主页',
-      roles: ['admin', 'editor'], // you can set roles in root nav
-      alwaysShow: true // will always show the root menu
+      alwaysShow: true // 将始终显示根菜单
     },
     children: [
       {
@@ -62,7 +64,7 @@ export const asyncRoutes: RouteConfig[] = [
         component: () => import('@/views/home/index.vue'),
         name: 'welcome',
         meta: {
-          title: '欢迎',
+          title: '欢迎'
         }
       },
       {
@@ -71,6 +73,26 @@ export const asyncRoutes: RouteConfig[] = [
         name: 'welcome2',
         meta: {
           title: '欢迎2',
+        }
+      }
+    ]
+  },
+  {
+    path: '/adminUser',
+    component: Layout,
+    redirect: '/adminUser/adminUserList',
+    name: 'adminUser',
+    meta: {
+      title: '管理员账号',
+      alwaysShow: true // 将始终显示根菜单
+    },
+    children: [
+      {
+        path: 'adminUserList',
+        component: () => import('@/views/adminUser/adminUserList.vue'),
+        name: 'adminUserList',
+        meta: {
+          title: '账号列表'
         }
       }
     ]

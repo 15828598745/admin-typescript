@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <three-bg class="bg-anim"/>
+    <three-bg class="bg-anim" />
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
       <div class="title-container">
         <h3 class="title">
@@ -15,11 +15,11 @@
       </el-form-item>
 
       <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
+        <el-form-item prop="pwd">
           <span class="svg-container">
             <i class="el-icon-lock" />
           </span>
-          <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="密码" name="password" tabindex="2" autocomplete="on" @keyup.native="checkCapslock" @blur="capsTooltip = false" @keyup.enter.native="handleLogin" />
+          <el-input :key="pwdType" ref="pwd" v-model="loginForm.pwd" :type="pwdType" placeholder="密码" name="pwd" tabindex="2" autocomplete="on" @keyup.native="checkCapslock" @blur="capsTooltip = false" @keyup.enter.native="handleLogin" />
           <span class="show-pwd" @click="showPwd">
             <i class="el-icon-view" />
           </span>
@@ -38,13 +38,14 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { Route } from "vue-router";
 import { Dictionary } from "vue-router/types/router";
 import { Form as ElForm, Input } from "element-ui";
-import { UserModule } from "@/store/modules/user";
 import { isValidUsername } from "@/utils/validate";
 import threeBg from "../../components/3DBG/index.vue";
+import { login } from "../../api/app";
+import { EErrCode } from "../../utils/errCode";
 
 @Component({
   name: "Login",
-  components:{
+  components: {
     threeBg
   }
 })
@@ -57,7 +58,7 @@ export default class extends Vue {
     }
   };
 
-  private validatePassword = (rule: any, value: string, callback: Function) => {
+  private validatepwd = (rule: any, value: string, callback: Function) => {
     if (value.length < 6) {
       callback(new Error("密码不能小于6位"));
     } else {
@@ -67,15 +68,15 @@ export default class extends Vue {
 
   private loginForm = {
     userName: "admin",
-    password: "111111"
+    pwd: "123456"
   };
 
   private loginRules = {
     userName: [{ validator: this.validateUsername, trigger: "blur" }],
-    password: [{ validator: this.validatePassword, trigger: "blur" }]
+    pwd: [{ validator: this.validatepwd, trigger: "blur" }]
   };
 
-  private passwordType = "password";
+  private pwdType = "pwd";
   private loading = false;
   private showDialog = false;
   private capsTooltip = false;
@@ -96,8 +97,8 @@ export default class extends Vue {
   mounted() {
     if (this.loginForm.userName === "") {
       (this.$refs.userName as Input).focus();
-    } else if (this.loginForm.password === "") {
-      (this.$refs.password as Input).focus();
+    } else if (this.loginForm.pwd === "") {
+      (this.$refs.pwd as Input).focus();
     }
   }
 
@@ -108,13 +109,13 @@ export default class extends Vue {
   }
 
   private showPwd() {
-    if (this.passwordType === "password") {
-      this.passwordType = "";
+    if (this.pwdType === "pwd") {
+      this.pwdType = "";
     } else {
-      this.passwordType = "password";
+      this.pwdType = "pwd";
     }
     this.$nextTick(() => {
-      (this.$refs.password as Input).focus();
+      (this.$refs.pwd as Input).focus();
     });
   }
 
@@ -122,7 +123,12 @@ export default class extends Vue {
     (this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
       if (valid) {
         this.loading = true;
-        await UserModule.Login(this.loginForm);
+        let ret = await login(this.loginForm);
+        if (ret.code !== EErrCode.OK) {
+          this.$message.error(ret.msg);
+          this.loading = false;
+          return;
+        }
         this.$router.push({
           path: this.redirect || "/",
           query: this.otherQuery

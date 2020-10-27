@@ -24,8 +24,8 @@ router.beforeEach(async (to: Route, _: Route, next: any) => {
       next()
     } else {
       await UserModule.GetUserInfo()
-      const roles = UserModule.roles
-      PermissionModule.GenerateRoutes(roles)
+      const power = UserModule.power
+      PermissionModule.GenerateRoutes(power)
       router.addRoutes(PermissionModule.dynamicRoutes)
       next({ ...to, replace: true })
       NProgress.done()

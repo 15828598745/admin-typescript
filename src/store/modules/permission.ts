@@ -1,23 +1,35 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
 import { RouteConfig } from 'vue-router'
-import { asyncRoutes, constantRoutes } from '@/router'
+import router, { asyncRoutes, constantRoutes } from '@/router'
 import store from '@/store'
+import { IPower, UserModule } from './user'
 
-const hasPermission = (roles: string[], route: RouteConfig) => {
-  if (route.meta && route.meta.roles) {
-    return roles.some(role => route.meta.roles.includes(role))
+const hasPermission = (power: IPower[], route: RouteConfig): boolean => {
+  if (route.name) {
+
+    for (let i = 0; i < power.length; i++) {
+      let item = power[i];
+      if (item.name === route.name) {
+        return true;
+      } else if (item.children) {
+        if (hasPermission(item.children, route)) {
+          return true;
+        }
+      }
+    }
+    return false;
   } else {
-    return true
+    return false
   }
 }
 
-export const filterAsyncRoutes = (routes: RouteConfig[], roles: string[]) => {
+export const filterAsyncRoutes = (routes: RouteConfig[], power: IPower[]) => {
   const res: RouteConfig[] = []
   routes.forEach(route => {
     const r = { ...route }
-    if (hasPermission(roles, r)) {
+    if (hasPermission(power, r) || r.path === "/") {
       if (r.children) {
-        r.children = filterAsyncRoutes(r.children, roles)
+        r.children = filterAsyncRoutes(r.children, power)
       }
       res.push(r)
     }
@@ -38,16 +50,16 @@ class Permission extends VuexModule implements IPermissionState {
   @Mutation
   private SET_ROUTES(routes: RouteConfig[]) {
     this.routes = constantRoutes.concat(routes)
-    this.dynamicRoutes = routes
+    this.dynamicRoutes = routes;
   }
 
   @Action
-  public GenerateRoutes(roles: string[]) {
+  public GenerateRoutes(power: IPower[]) {
     let accessedRoutes
-    if (roles.includes('admin')) {
+    if (UserModule.userName === "admin") {
       accessedRoutes = asyncRoutes
     } else {
-      accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      accessedRoutes = filterAsyncRoutes(asyncRoutes, power)
     }
     this.SET_ROUTES(accessedRoutes)
   }

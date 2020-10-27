@@ -17,6 +17,7 @@ module.exports = {
     'eqeqeq': 'warn',//只能使用 '===' 或 '!=='
     'no-multi-spaces': 'warn',//禁止多个空格
     'require-await': 'warn',//禁止没有await表达式的异步函数
+    '@typescript-eslint/no-array-constructor': 'off',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/member-delimiter-style': ['error',

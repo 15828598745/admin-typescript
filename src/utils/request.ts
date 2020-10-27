@@ -29,21 +29,19 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     const res = response.data
-    if (res.code !== EErrCode.OK) {
-      if (res.code === EErrCode.NoLogin) {
-        MessageBox.confirm(
-          '你已被登出，可以取消继续留在该页面，或者重新登录',
-          '确定登出',
-          {
-            confirmButtonText: '重新登录',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }
-        ).then(() => {
-          UserModule.ResetName();
-          router.push("/login") // To prevent bugs from vue-router
-        })
-      }
+    if (res.code === EErrCode.NoLogin) {
+      MessageBox.confirm(
+        '你已被登出，可以取消继续留在该页面，或者重新登录',
+        '确定登出',
+        {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).then(() => {
+        UserModule.ResetName();
+        router.push("/login") // To prevent bugs from vue-router
+      })
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return response.data
