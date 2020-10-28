@@ -1,10 +1,10 @@
-const path = require('path')
+import path from "path";
 const devServerPort = 9527
 const name = '后台管理系统'
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: false,
   productionSourceMap: false,
   devServer: {
     port: devServerPort,
